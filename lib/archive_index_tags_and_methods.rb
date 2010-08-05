@@ -6,13 +6,15 @@ module ArchiveIndexTagsAndMethods
     tag.expand
   end
   
-  tag "title" do |tag|
-    setup_date_parts
-    page = tag.locals.page
-    unless @year.nil?
-      Date.new((@year || 1).to_i, (@month || 1).to_i, (@day || 1).to_i).strftime(page.title)
-    else
-      page.title
+  [:title, :breadcrumb].each do |method|
+    tag method.to_s do |tag|
+      setup_date_parts
+      page = tag.locals.page
+      unless @year.nil?
+        Date.new((@year || 1).to_i, (@month || 1).to_i, (@day || 1).to_i).strftime(page.send(method))
+      else
+        page.send(method)
+      end
     end
   end
   
