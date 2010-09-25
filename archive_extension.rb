@@ -7,17 +7,20 @@ class ArchiveExtension < Radiant::Extension
   url "http://dev.radiantcms.org/"
     
   def activate
-    Page.class_eval {
-      # in the case that page_menu is not loaded
-      unless new.respond_to?(:default_child)
-        def default_child
-          Page
+    # allow bootstrap
+    if Page.table_exists?
+      Page.class_eval {
+        # in the case that page_menu is not loaded
+        unless new.respond_to?(:default_child)
+          def default_child
+            Page
+          end
         end
-      end
-      def allowed_children
-        [default_child, *Page.descendants.sort_by(&:name)].select(&:in_menu?).reject{|p| p.name =~ /Archive(Day|Month|Year)IndexPage/}
-      end
-    }
+        def allowed_children
+          [default_child, *Page.descendants.sort_by(&:name)].select(&:in_menu?).reject{|p| p.name =~ /Archive(Day|Month|Year)IndexPage/}
+        end
+      }
+    end
   end
   
   def deactivate
