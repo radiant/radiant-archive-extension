@@ -7,6 +7,8 @@ describe ArchiveYearIndexPage do
     @page = pages(:year_index)
   end
   
+  its(:allowed_children){ should == [] }
+  
   it_should_behave_like "Archive index page"
   
   it "should render the <r:archive:children:each /> tag" do

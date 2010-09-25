@@ -7,6 +7,8 @@ describe ArchiveMonthIndexPage do
     @page = pages(:month_index)
   end
   
+  its(:allowed_children){ should == [] }
+  
   it_should_behave_like "Archive index page"
   
   it "should render the <r:archive:children:each /> tag" do

@@ -1,5 +1,9 @@
 class ArchiveMonthIndexPage < Page
   
+  def allowed_children
+    []
+  end
+  
   description %{
     To create a month index for an archive, create a child page for the
     archive and assign the "Archive Month Index" page type to it.
