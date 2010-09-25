@@ -1,4 +1,20 @@
 class ArchivePage < Page
+  cattr_accessor :allowed_children
+  cattr_accessor :single_use_children
+  @@single_use_children = [ArchiveDayIndexPage, ArchiveMonthIndexPage, ArchiveYearIndexPage, FileNotFoundPage]
+  @@allowed_children = [Page, *@@single_use_children]
+  
+  def allowed_children
+    allowed = @@allowed_children.dup
+    existing_types = children.all(:select => 'DISTINCT class_name').map(&:class_name)
+    single_use = @@single_use_children.map(&:to_s)
+    single_use.each do |limited|
+      if existing_types.include?(limited)
+        allowed.delete_if{|a| a.to_s == limited}
+      end
+    end
+    allowed
+  end
 
   description %{
     An archive page provides behavior similar to a blog archive or a news

@@ -3,9 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe ArchivePage do
   dataset :archive
   
-  before :each do
-    @page = pages(:archive)
-  end
+  let(:archive){ pages(:archive) }
   
   it "should scope child URLs by date" do
     pages(:article_1).url.should == '/archive/2000/01/01/article-1/'
@@ -16,18 +14,31 @@ describe ArchivePage do
   end
   
   it "should find the year index" do
-    @page.find_by_url('/archive/2000/').should == pages(:year_index)
+    archive.find_by_url('/archive/2000/').should == pages(:year_index)
   end
   
   it "should find the month index" do
-    @page.find_by_url('/archive/2000/06/').should == pages(:month_index)
+    archive.find_by_url('/archive/2000/06/').should == pages(:month_index)
   end
   
   it "should find the day index" do
-    @page.find_by_url('/archive/2000/06/09/').should == pages(:day_index)
+    archive.find_by_url('/archive/2000/06/09/').should == pages(:day_index)
   end
   
   it "should find child URLs from the homepage" do
     pages(:home).find_by_url('/archive/2000/01/01/article-1/').should == pages(:article_1)
+  end
+  
+  its(:single_use_children){ should == [ArchiveDayIndexPage, ArchiveMonthIndexPage, ArchiveYearIndexPage, FileNotFoundPage]}
+  its(:allowed_children){ should == [Page, *ArchivePage.single_use_children]}
+  
+  describe '#allowed_children' do
+    context 'when no children exist' do
+      subject{ ArchivePage.new }
+      its(:allowed_children){ should == ArchivePage.allowed_children }
+    end
+    it 'should remove any existing single_use_children from the allowed_children' do
+      archive.allowed_children.should == [Page, FileNotFoundPage]
+    end
   end
 end
