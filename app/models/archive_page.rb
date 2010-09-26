@@ -7,13 +7,9 @@ class ArchivePage < Page
   def allowed_children
     allowed = @@allowed_children.dup
     existing_types = children.all(:select => 'DISTINCT class_name').map(&:class_name)
-    single_use = @@single_use_children.map(&:to_s)
-    single_use.each do |limited|
-      if existing_types.include?(limited)
-        allowed.delete_if{|a| a.to_s == limited}
-      end
-    end
-    allowed
+    overlap = allowed.map(&:to_s) & existing_types
+    
+    allowed - overlap.map!(&:constantize)
   end
 
   description %{
