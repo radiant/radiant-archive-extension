@@ -6,7 +6,7 @@ class ArchivePage < Page
   
   def allowed_children
     allowed = @@allowed_children.dup
-    existing_types = children.all(:select => 'DISTINCT class_name').map(&:class_name)
+    existing_types = children.all(:select => 'DISTINCT class_name, virtual, title').map(&:class_name)
     overlap = allowed.map(&:to_s) & existing_types
     
     allowed - overlap.map!(&:constantize)
