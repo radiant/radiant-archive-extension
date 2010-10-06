@@ -11,8 +11,12 @@ class ArchivePage < Page
   }
   
   def child_url(child)
-    date = child.published_at || Time.now
-    clean_url "#{ url }/#{ date.strftime '%Y/%m/%d' }/#{ child.slug }"
+    if child.request and %w{ArchiveDayIndexPage ArchiveMonthIndexPage ArchiveYearIndexPage}.include?(child.class_name)
+      clean_url child.request.request_uri
+    else
+      date = child.published_at || Time.now
+      clean_url "#{ url }/#{ date.strftime '%Y/%m/%d' }/#{ child.slug }"
+    end
   end
   
   def find_by_url(url, live = true, clean = false)

@@ -23,6 +23,6 @@ describe ArchiveDayIndexPage do
   end
 
   it "should render the <r:url /> tag with interpolated date" do
-    @page.should render('<r:url />').as('/archive/2000/06/09').on('/archive/2000/06/09')
+    @page.should render('<r:url />').as('/archive/2000/06/09/').on('/archive/2000/06/09')
   end
 end
