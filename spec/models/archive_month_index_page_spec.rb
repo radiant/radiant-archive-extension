@@ -17,4 +17,8 @@ describe ArchiveMonthIndexPage do
   it "should render the <r:title /> tag with interpolated date" do
     @page.should render('<r:title />').as('June 2000 Archive').on('/archive/2000/06/')
   end
+
+  it "should render the <r:breadcrumb /> tag with interpolated date" do
+    @page.should render('<r:breadcrumb />').as('June 2000 Archive').on('/archive/2000/06/')
+  end
 end
