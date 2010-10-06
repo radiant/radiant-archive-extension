@@ -11,10 +11,16 @@ class ArchivePage < Page
   }
   
   def child_url(child)
-    if child.request and %w{ArchiveDayIndexPage ArchiveMonthIndexPage ArchiveYearIndexPage}.include?(child.class_name)
-      clean_url child.request.request_uri
+    @year, @month, @day = $1, ($2 || 1).to_i, ($3 || 1).to_i if child.request and child.request.request_uri =~ %r{/(\d{4})(?:/(\d{2})(?:/(\d{2}))?)?/?$}
+    date = (@year ? Date.new(@year.to_i, @month, @day) : (child.published_at || Time.now))
+
+    if ArchiveYearIndexPage === child
+      clean_url "#{ url }/#{ date.strftime '%Y' }/"
+    elsif ArchiveMonthIndexPage === child
+      clean_url "#{ url }/#{ date.strftime '%Y/%m' }/"
+    elsif ArchiveDayIndexPage === child
+      clean_url "#{ url }/#{ date.strftime '%Y/%m/%d/' }/"
     else
-      date = child.published_at || Time.now
       clean_url "#{ url }/#{ date.strftime '%Y/%m/%d' }/#{ child.slug }"
     end
   end
