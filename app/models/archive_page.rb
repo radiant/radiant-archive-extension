@@ -22,14 +22,15 @@ class ArchivePage < Page
     month, and day indexes.
   }
   
-  def child_url(child)
+  def child_path(child)
     date = child.published_at || Time.now
-    clean_url "#{ url }/#{ date.strftime '%Y/%m/%d' }/#{ child.slug }"
+    clean_path "#{ path }/#{ date.strftime '%Y/%m/%d' }/#{ child.slug }"
   end
+  alias_method :child_url, :child_path
   
-  def find_by_url(url, live = true, clean = false)
-    url = clean_url(url) if clean
-    if url =~ %r{^#{ self.url }(\d{4})(?:/(\d{2})(?:/(\d{2}))?)?/?$}
+  def find_by_path(path, live = true, clean = false)
+    path = clean_path(path) if clean
+    if path =~ %r{^#{ self.path }(\d{4})(?:/(\d{2})(?:/(\d{2}))?)?/?$}
       year, month, day = $1, $2, $3
       children.find_by_class_name(
         case
@@ -45,4 +46,5 @@ class ArchivePage < Page
       super
     end
   end
+  alias_method :find_by_url, :find_by_path
 end
