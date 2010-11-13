@@ -9,17 +9,12 @@ class ArchiveExtension < Radiant::Extension
   def activate
     # allow bootstrap
     if Page.table_exists?
-      Page.class_eval {
-        # in the case that page_menu is not loaded
-        unless new.respond_to?(:default_child)
-          def default_child
-            Page
-          end
+      Page.class_eval do
+        def allowed_children_with_archive
+          allowed_children_without_archive.reject { |p| p.name =~ /Archive(Day|Month|Year)IndexPage/ }
         end
-        def allowed_children
-          [default_child, *Page.descendants.sort_by(&:name)].select(&:in_menu?).reject{|p| p.name =~ /Archive(Day|Month|Year)IndexPage/}
-        end
-      }
+        alias_method_chain :allowed_children, :archive
+      end
     end
   end
   
