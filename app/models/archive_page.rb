@@ -2,7 +2,7 @@ class ArchivePage < Page
   cattr_accessor :allowed_children
   cattr_accessor :single_use_children
   @@single_use_children = [ArchiveDayIndexPage, ArchiveMonthIndexPage, ArchiveYearIndexPage, FileNotFoundPage]
-  @@allowed_children = [self.new.default_child, *@@single_use_children]
+  @@allowed_children = [self.default_child, *@@single_use_children]
   
   def allowed_children
     overlap = @@allowed_children & (existing_child_types - [default_child])
