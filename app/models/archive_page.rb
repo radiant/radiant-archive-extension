@@ -25,8 +25,18 @@ class ArchivePage < Page
   }
   
   def child_path(child)
-    date = child.published_at || Time.now
-    clean_path "#{ path }/#{ date.strftime '%Y/%m/%d' }/#{ child.slug }"
+    @year, @month, @day = $1, ($2 || 1).to_i, ($3 || 1).to_i if child.request and child.request.request_uri =~ %r{/(\d{4})(?:/(\d{2})(?:/(\d{2}))?)?/?$}
+    date = (@year ? Date.new(@year.to_i, @month, @day) : (child.published_at || Time.now))
+
+    if ArchiveYearIndexPage === child
+      clean_url "#{ url }/#{ date.strftime '%Y' }/"
+    elsif ArchiveMonthIndexPage === child
+      clean_url "#{ url }/#{ date.strftime '%Y/%m' }/"
+    elsif ArchiveDayIndexPage === child
+      clean_url "#{ url }/#{ date.strftime '%Y/%m/%d/' }/"
+    else
+      clean_url "#{ url }/#{ date.strftime '%Y/%m/%d' }/#{ child.slug }"
+    end
   end
   alias_method :child_url, :child_path
   

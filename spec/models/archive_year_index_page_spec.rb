@@ -19,4 +19,13 @@ describe ArchiveYearIndexPage do
   it "should render the <r:title /> tag with interpolated date" do
     @page.should render('<r:title />').as('2000 Archive').on('/archive/2000')
   end
+
+  it "should render the <r:breadcrumb /> tag with interpolated date" do
+    @page.should render('<r:breadcrumb />').as('2000 Archive').on('/archive/2000')
+  end
+
+  it "should render the <r:url /> tag with interpolated date" do
+    @page.should render('<r:url />').as('/archive/2000/').on('/archive/2000')
+  end
+
 end

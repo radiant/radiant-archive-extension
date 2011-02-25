@@ -14,19 +14,19 @@ describe ArchivePage do
   end
   
   it "should find the year index" do
-    archive.find_by_url('/archive/2000/').should == pages(:year_index)
+    archive.find_by_path('/archive/2000/').should == pages(:year_index)
   end
   
   it "should find the month index" do
-    archive.find_by_url('/archive/2000/06/').should == pages(:month_index)
+    archive.find_by_path('/archive/2000/06/').should == pages(:month_index)
   end
   
   it "should find the day index" do
-    archive.find_by_url('/archive/2000/06/09/').should == pages(:day_index)
+    archive.find_by_path('/archive/2000/06/09/').should == pages(:day_index)
   end
   
   it "should find child URLs from the homepage" do
-    pages(:home).find_by_url('/archive/2000/01/01/article-1/').should == pages(:article_1)
+    pages(:home).find_by_path('/archive/2000/01/01/article-1/').should == pages(:article_1)
   end
   
   its(:single_use_children){ should == [ArchiveDayIndexPage, ArchiveMonthIndexPage, ArchiveYearIndexPage, FileNotFoundPage]}
