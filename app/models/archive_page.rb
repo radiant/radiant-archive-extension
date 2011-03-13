@@ -24,8 +24,6 @@ class ArchivePage < Page
     month, and day indexes.
   }
   
-  include ArchiveIndexTagsAndMethods
-  
   def child_path(child)
     @year, @month, @day = $1, ($2 || 1).to_i, ($3 || 1).to_i if child.request and child.request.request_uri =~ %r{/(\d{4})(?:/(\d{2})(?:/(\d{2}))?)?/?$}
     date = (@year ? Date.new(@year.to_i, @month, @day) : (child.published_at || Time.now))
