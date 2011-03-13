@@ -31,26 +31,32 @@ class ArchivePage < Page
     date = (@year ? Date.new(@year.to_i, @month, @day) : (child.published_at || Time.now))
 
     if ArchiveYearIndexPage === child
-      clean_url "#{ url }/#{ date.strftime '%Y' }/"
+      clean_path "#{ url }/#{ date.strftime '%Y' }/"
     elsif ArchiveMonthIndexPage === child
-      clean_url "#{ url }/#{ date.strftime '%Y/%m' }/"
+      clean_path "#{ url }/#{ date.strftime '%Y/%m' }/"
     elsif ArchiveDayIndexPage === child
-      clean_url "#{ url }/#{ date.strftime '%Y/%m/%d/' }/"
+      clean_path "#{ url }/#{ date.strftime '%Y/%m/%d/' }/"
     else
-      clean_url "#{ url }/#{ date.strftime '%Y/%m/%d' }/#{ child.slug }"
+      clean_path "#{ url }/#{ date.strftime '%Y/%m/%d' }/#{ child.slug }"
     end
   end
-  alias_method :child_url, :child_path
+  def child_url(child)
+    ActiveSupport::Deprecation.warn("`child_url' has been deprecated; use `child_path' instead.", caller)
+    child_path(child)
+  end
   
   def find_by_path(path, live = true, clean = false)
     path = clean_path(path) if clean
-    if path =~ %r{^#{ self.path }(\d{4})(?:/(\d{2})(?:/(\d{2}))?)?/?$}
-      year, month, day = $1, $2, $3
+    if path =~ %r{^#{ self.path }(\d{4})(?:/(\d{2})(?:/(\d{2})(?:/([-_.A-Za-z0-9]*))?)?)?/?$}
+      year, month, day, slug = $1, $2, $3, $4
       children.find_by_class_name(
         case
-        when day
+        when slug.present?
+          found = children.find_by_slug(slug)
+          return found if found
+        when day.present?
           'ArchiveDayIndexPage'
-        when month
+        when month.present?
           'ArchiveMonthIndexPage'
         else
           'ArchiveYearIndexPage'
