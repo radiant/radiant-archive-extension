@@ -10,7 +10,7 @@ class ArchiveFinder
   
   # stub for page tag finding
   def all(method, options ={})
-    self.find(:all)
+    self.find(:all, options)
   end
   
   class << self
