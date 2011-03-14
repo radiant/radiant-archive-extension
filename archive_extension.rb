@@ -1,10 +1,10 @@
 # Uncomment this if you reference any of your controllers in activate
-# require_dependency 'application'
-
+# require_dependency 'application_controller'
+require 'radiant-archive-extension/version'
 class ArchiveExtension < Radiant::Extension
-  version "1.0"
+  version RadiantArchiveExtension::VERSION
   description "Provides page types for news or blog archives."
-  url "http://dev.radiantcms.org/"
+  url "http://radiantcms.org/"
     
   def activate
     # allow bootstrap
@@ -17,8 +17,4 @@ class ArchiveExtension < Radiant::Extension
       end
     end
   end
-  
-  def deactivate
-  end
-  
 end
