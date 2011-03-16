@@ -5,6 +5,10 @@ describe ArchivePage do
   
   let(:archive){ pages(:archive) }
   
+  it "should not render archive index pages" do
+    archive.should render('<r:children:each><r:slug /> </r:children:each>').as('article-1 article-2 article-3 article-4 article-5 ')
+  end
+  
   it "should scope child URLs by date" do
     pages(:article_1).url.should == '/archive/2000/01/01/article-1/'
   end
@@ -34,7 +38,7 @@ describe ArchivePage do
   
   describe '#existing_child_types' do
     it 'should return a unique array of classes of the page children' do
-      archive.existing_child_types.should == archive.children.all(:select => 'DISTINCT class_name').collect{|p| p.class }
+      archive.existing_child_types.should == archive.children.all(:select => 'DISTINCT class_name').collect{|p| p.class }.uniq
     end
   end
   

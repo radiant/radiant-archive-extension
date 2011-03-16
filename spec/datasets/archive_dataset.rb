@@ -3,9 +3,9 @@ class ArchiveDataset < Dataset::Base
   
   def load
     create_page "Archive", :class_name => "ArchivePage" do
-      create_page "Year Index", :class_name => "ArchiveYearIndexPage", :title => "%Y Archive"
-      create_page "Month Index", :class_name => "ArchiveMonthIndexPage", :title => "%B %Y Archive"
-      create_page "Day Index", :class_name => "ArchiveDayIndexPage", :title => "%B %d, %Y Archive"
+      create_page "Year Index", :class_name => "ArchiveYearIndexPage", :title => "%Y Archive", :virtual => true # dataset won't load this
+      create_page "Month Index", :class_name => "ArchiveMonthIndexPage", :title => "%B %Y Archive", :virtual => true # dataset won't load this
+      create_page "Day Index", :class_name => "ArchiveDayIndexPage", :title => "%B %d, %Y Archive", :virtual => true # dataset won't load this
       (1..5).each do |i|
         create_page "Article #{i}", :published_at => Time.local(1999+i, i, i).to_s(:db)
       end
