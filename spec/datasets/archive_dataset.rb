@@ -6,9 +6,13 @@ class ArchiveDataset < Dataset::Base
       create_page "Year Index", :class_name => "ArchiveYearIndexPage", :title => "%Y Archive", :virtual => true # dataset won't load this
       create_page "Month Index", :class_name => "ArchiveMonthIndexPage", :title => "%B %Y Archive", :virtual => true # dataset won't load this
       create_page "Day Index", :class_name => "ArchiveDayIndexPage", :title => "%B %d, %Y Archive", :virtual => true # dataset won't load this
-      (1..5).each do |i|
-        create_page "Article #{i}", :published_at => Time.local(1999+i, i, i).to_s(:db)
+      %w{Z Y X W V}.each_with_index do |letter, index|
+        i = index + 1
+        create_page "Article #{letter}", :published_at => Time.local(1999+i, i, i).to_s(:db)
       end
+      create_page "Early Post", :published_at => Time.local(2000, 01, 02).to_s(:db)
+      create_page "Z Post", :published_at => Time.local(2000, 01, 03).to_s(:db)
+      create_page "A Post", :published_at => Time.local(2000, 01, 04).to_s(:db)
       create_page "Draft Article", :status_id => Status[:draft].id, :published_at => nil
     end
   end

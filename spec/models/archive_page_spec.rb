@@ -6,15 +6,15 @@ describe ArchivePage do
   let(:archive){ pages(:archive) }
   
   it "should not render archive index pages" do
-    archive.should render('<r:children:each><r:slug /> </r:children:each>').as('article-1 article-2 article-3 article-4 article-5 ')
+    archive.should render('<r:children:each><r:slug /> </r:children:each>').as('article-z early-post z-post a-post article-y article-x article-w article-v ')
   end
   
   it "should scope child URLs by date" do
-    pages(:article_1).url.should == '/archive/2000/01/01/article-1/'
+    pages(:article_z).url.should == '/archive/2000/01/01/article-z/'
   end
   
   it "should scope unpublished children by the current date" do
-    pages(:draft_article).url.should == '/archive/' + Time.now.strftime('%Y/%m/%d') + '/draft-article/'
+    pages(:draft_article).url.should == '/archive/' + Time.zone.now.strftime('%Y/%m/%d') + '/draft-article/'
   end
   
   it "should find the year index" do
@@ -30,7 +30,7 @@ describe ArchivePage do
   end
   
   it "should find child URLs from the homepage" do
-    pages(:home).find_by_path('/archive/2000/01/01/article-1/').should == pages(:article_1)
+    pages(:home).find_by_path('/archive/2000/01/01/article-z/').should == pages(:article_z)
   end
   
   its(:single_use_children){ should == [ArchiveDayIndexPage, ArchiveMonthIndexPage, ArchiveYearIndexPage, FileNotFoundPage]}

@@ -9,7 +9,7 @@ class ArchiveFinder
   end
   
   # stub for page tag finding
-  def all(method, options ={})
+  def all(options ={})
     self.find(:all, options)
   end
   
