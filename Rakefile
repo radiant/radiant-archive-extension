@@ -26,7 +26,7 @@ Object.send(:remove_const, :RADIANT_ROOT)
 
 extension_root = File.expand_path(File.dirname(__FILE__))
 
-task :default => :spec
+task :default => [:spec, :features]
 task :stats => "spec:statsetup"
 
 desc "Run all specs in spec directory"
@@ -36,7 +36,6 @@ Spec::Rake::SpecTask.new(:spec) do |t|
 end
 
 task :features => 'spec:integration'
-task :spec => :features
 
 namespace :spec do
   desc "Run all specs in spec directory with RCov"
@@ -64,7 +63,8 @@ namespace :spec do
   desc "Run the Cucumber features"
   Cucumber::Rake::Task.new(:integration) do |t|
     t.fork = true
-    t.cucumber_opts = ['--format', (ENV['CUCUMBER_FORMAT'] || 'progress')]
+    t.cucumber_opts = ['--format', (ENV['CUCUMBER_FORMAT'] || 'pretty')]
+    # t.feature_pattern = "#{extension_root}/features/**/*.feature"
     t.profile = "default"
   end
 
