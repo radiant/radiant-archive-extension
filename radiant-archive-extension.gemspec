@@ -11,14 +11,19 @@ Gem::Specification.new do |s|
   s.homepage    = "http://radiantcms.org"
   s.summary     = %q{Archive for Radiant CMS}
   s.description = %q{Provides page types for news or blog archives.}
-
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  
+  ignores = if File.exist?('.gitignore')
+    File.read('.gitignore').split("\n").inject([]) {|a,p| a + Dir[p] }
+  else
+    []
+  end
+  s.files         = Dir['**/*'] - ignores
+  s.test_files    = Dir['test/**/*','spec/**/*','features/**/*'] - ignores
+  # s.executables   = Dir['bin/*'] - ignores
   s.require_paths = ["lib"]
   
   s.post_install_message = %{
   Add this to your radiant project with:
-    config.gem 'radiant-archive-extension', :version => '#{RadiantArchiveExtension::VERSION}'
+    config.gem 'radiant-archive-extension', :version => '~>#{RadiantArchiveExtension::VERSION}'
   }
 end
