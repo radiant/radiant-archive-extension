@@ -24,7 +24,7 @@ describe ArchiveDayIndexPage do
     @page.should render('<r:breadcrumb />').as('June 09, 2000 Archive').on('/archive/2000/06/09/')
   end
 
-  it "should render the <r:url /> tag with interpolated date" do
-    @page.should render('<r:url />').as('/archive/2000/06/09/').on('/archive/2000/06/09')
+  it "should render the <r:path /> tag with interpolated date" do
+    @page.should render('<r:path />').as('/archive/2000/06/09/').on('/archive/2000/06/09')
   end
 end
