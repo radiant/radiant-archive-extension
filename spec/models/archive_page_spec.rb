@@ -38,7 +38,7 @@ describe ArchivePage do
   
   describe '#existing_child_types' do
     it 'should return a unique array of classes of the page children' do
-      archive.existing_child_types.should == archive.children.all(:select => 'DISTINCT class_name').collect{|p| p.class }.uniq
+      archive.existing_child_types.should == archive.children.all(:select => 'DISTINCT class_name, title, virtual').collect{|p| p.class }.uniq
     end
   end
   

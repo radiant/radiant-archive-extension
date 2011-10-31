@@ -11,7 +11,7 @@ class ArchivePage < Page
   end
   
   def existing_child_types
-    children(:select => 'DISTINCT class_name', :order => nil).collect{|p| p.class }.uniq
+    children(:select => 'DISTINCT class_name, title, virtual', :order => nil).collect{|p| p.class }.uniq
   end
 
   description %{
