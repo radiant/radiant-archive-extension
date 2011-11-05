@@ -34,23 +34,11 @@ describe ArchivePage do
   end
   
   its(:single_use_children){ should == [ArchiveDayIndexPage, ArchiveMonthIndexPage, ArchiveYearIndexPage, FileNotFoundPage]}
-  its(:allowed_children){ should == [Page, *ArchivePage.single_use_children]}
   
   describe '#existing_child_types' do
     it 'should return a unique array of classes of the page children' do
-      archive.existing_child_types.should == archive.children.all(:select => 'DISTINCT class_name, title, virtual').collect{|p| p.class }.uniq
+      archive.existing_child_types.should == archive.children(:select => 'DISTINCT class_name, title, virtual', :order => nil).map(&:class_name).compact.map(&:constantize).uniq
     end
   end
   
-  describe '#allowed_children' do
-    context 'when no children exist' do
-      subject{ ArchivePage.new }
-      its(:allowed_children){ should == ArchivePage.allowed_children }
-    end
-    it 'should remove any existing single_use_children from the allowed_children' do
-      existing_except_default = archive.existing_child_types - [archive.default_child]
-      used_allowed_children = ArchivePage.allowed_children & existing_except_default
-      archive.allowed_children.should == (ArchivePage.allowed_children - used_allowed_children)
-    end
-  end
 end

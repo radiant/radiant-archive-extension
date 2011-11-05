@@ -1,17 +1,17 @@
 class ArchivePage < Page
-  cattr_accessor :allowed_children
   cattr_accessor :single_use_children
   @@single_use_children = [ArchiveDayIndexPage, ArchiveMonthIndexPage, ArchiveYearIndexPage, FileNotFoundPage]
-  @@allowed_children = [self.default_child, *@@single_use_children]
   
-  def allowed_children
-    overlap = @@allowed_children & (existing_child_types - [default_child])
+  def set_allowed_children_cache
+    singles = self.class.single_use_children.map(&:name)
+    existing = existing_child_types.map(&:name)
+    all = allowed_children_lookup.map(&:name)
     
-    (@@allowed_children - overlap)
+    self.allowed_children_cache = (all - (singles & existing)).join(',')
   end
   
   def existing_child_types
-    children(:select => 'DISTINCT class_name, title, virtual', :order => nil).collect{|p| p.class }.uniq
+    children(:select => 'DISTINCT class_name, title, virtual', :order => nil).map(&:class_name).compact.map(&:constantize).uniq
   end
 
   description %{
