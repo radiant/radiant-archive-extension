@@ -12,14 +12,19 @@ Gem::Specification.new do |s|
   s.summary     = %q{Archive for Radiant CMS}
   s.description = %q{Provides page types for news or blog archives.}
   
-  ignores = if File.exist?('.gitignore')
-    File.read('.gitignore').split("\n").inject([]) {|a,p| a + Dir[p] }
-  else
-    []
-  end
-  s.files         = Dir['**/*'] - ignores
-  s.test_files    = Dir['test/**/*','spec/**/*','features/**/*'] - ignores
-  # s.executables   = Dir['bin/*'] - ignores
+  ignoreable_commands = File.read('.gitignore').split("\n").delete_if{|line| line.match(/^##/) || line.empty? }
+  ignoreable_files = ignoreable_commands.collect{|line| 
+    if File.directory?(line)
+      line + "/**/*"
+    elsif File.file?(line)
+      line
+    end
+  }.compact
+  
+  s.files = Dir['**/*','.gitignore'] - Dir[*ignoreable_files]
+
+  s.test_files    = Dir['test/**/*','spec/**/*','features/**/*'] - Dir[*ignoreable_files]
+  
   s.require_paths = ["lib"]
   
 end
