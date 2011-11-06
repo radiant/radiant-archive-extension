@@ -1,6 +1,10 @@
 module ArchiveMenuRenderer
   def excluded_class_names
-    Array(ArchiveMenuRenderer.instance_variable_get(:@excluded_class_names))
+    excluded_from_this = Array(ArchiveMenuRenderer.instance_variable_get(:@excluded_class_names))
+    if defined?(super)
+      return super + excluded_from_this
+    end
+    excluded_from_this
   end
 end
 
