@@ -5,6 +5,11 @@ module AnotherMenuRenderer
     ['AnotherPage']
   end
 end
+module ArchiveExcludingMenuRenderer
+  def excluded_class_names
+    ['ArchiveDayIndexPage','ArchiveMonthIndexPage','ArchiveYearIndexPage']
+  end
+end
 
 describe ArchiveMenuRenderer do
   context 'excluding classes from child list' do
@@ -21,6 +26,22 @@ describe ArchiveMenuRenderer do
       page.extend AnotherMenuRenderer
       page.excluded_class_names.should include('AnotherPage')
     end
+  end
+  context 'excluded_class_names' do
+    before{ 
+      ArchiveMenuRenderer.instance_variable_set(:@excluded_class_names, ['SkippedPage'])
+    }
+    let(:page){
+      page = Object.new
+      page.extend ArchiveExcludingMenuRenderer
+      page.extend ArchiveMenuRenderer
+      page
+    }
+    subject{ page }
+    its(:excluded_class_names){ should_not include('ArchiveDayIndexPage') }
+    its(:excluded_class_names){ should_not include('ArchiveMonthIndexPage') }
+    its(:excluded_class_names){ should_not include('ArchiveYearIndexPage') }
+    its(:excluded_class_names){ should include('ArchivePage') }
   end
 end
 
