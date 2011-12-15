@@ -7,7 +7,7 @@ module ArchiveMenuRenderer
     else
       excluded_from_this
     end
-    excluded_from_this - ['ArchiveDayIndexPage', 'ArchiveMonthIndexPage', 'ArchiveYearIndexPage']
+    result - ['ArchiveDayIndexPage', 'ArchiveMonthIndexPage', 'ArchiveYearIndexPage']
   end
 end
 
